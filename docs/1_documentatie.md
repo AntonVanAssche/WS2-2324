@@ -36,11 +36,11 @@ PC-1 is een standaard Windows 10 machine, die via DHCP een IP-adres krijgt.
 
 De topologie bestaat uit 3 servers en 1 client, deze zijn verbonden aan een switch. Om ervoor te zorgen dat zowel de servers als de client kunnen surfen op het internet is deze switch verbonden aan een router, die op zijn beurt verbonden is aan de cloud/ISP.
 
-| Hostname       | IP-adres     | Gateway      | Subnetmasker  |
-| :------------- | :----------- | :----------- | :------------ |
-| QuantumToast   | 192.168.23.1 | 192.168.23.1 | 255.255.255.0 |
-| TurboTaco      | 192.168.23.2 | 192.168.23.1 | 255.255.255.0 |
-| TofuTerminator | 192.168.23.3 | 192.168.23.1 | 255.255.255.0 |
-| PC-1           | DHCP         | DHCP         | 255.255.255.0 |
+| Hostname       | IP-adres     | Gateway | Subnetmasker  |
+| :------------- | :----------- | :------ | :------------ |
+| QuantumToast   | 192.168.23.1 | n.v.t.  | 255.255.255.0 |
+| TurboTaco      | 192.168.23.2 | n.v.t.  | 255.255.255.0 |
+| TofuTerminator | 192.168.23.3 | n.v.t.  | 255.255.255.0 |
+| PC-1           | DHCP         | DHCP    | 255.255.255.0 |
 
 <div class="page"/>
