@@ -1,15 +1,16 @@
 # Windows Server II - Documentatie
 
+**Naam**: Anton Van Assche</br>
+**Klas**: G3B
+
 ## Inhoudsopgave
 
-1. [Inleiding](#inleiding)
-2. [Opstelling](#opstelling)
+1. [Opstelling](#opstelling)
     1. [VMs](#vms)
     2. [Topologie](#topologie)
-
-# Inleiding <a name="inleiding"></a>
-
-<div class="page"/>
+2. [Ondervonden Problemen](#ondervonden-problemen)
+3. [Huidige Status](#huidige-status)
+4. [Conclusie](#conclusie)
 
 # Opstelling <a name="opstelling"></a>
 
@@ -44,3 +45,15 @@ De topologie bestaat uit 3 servers en 1 client, deze zijn verbonden aan een swit
 | PC-1           | DHCP         | DHCP    | 255.255.255.0 |
 
 <div class="page"/>
+
+# Ondervonden Problemen <a name="ondervonden-problemen"></a>
+
+/
+
+# Huidige Status <a name="huidige-status"></a>
+
+Op dit moment ben ik nog bezig met het automatiseren van de installatie van de Windows Servers. Met name het automatisch aanmaken van de virtual machines a.d.h. `vboxmanage`.
+
+Om ervoor te zorgen dat de code die ik schrijf niet verloren kan gaan bij een systeemcrash, heb ik een Git repository aangemaakt op GitHub. Deze is te vinden op [https://www.github.com/AntonVanAssche/WS2-2324](https://www.github.com/AntonVanAssche/WS2-2324).
+
+# Conclusie <a name="conclusie"></a>
