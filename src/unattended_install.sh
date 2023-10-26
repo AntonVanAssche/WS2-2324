@@ -93,7 +93,7 @@ vboxmanage storageattach "${VM_NAME}" \
 }
 vboxmanage sharedfolder add "${VM_NAME}" \
     --name "Shared" \
-    --hostpath "${HOME}/Shared" \
+    --hostpath "$(pwd)/provision/" \
     --automount
 
 if [[ "${GUI}" -eq 1 ]]; then
