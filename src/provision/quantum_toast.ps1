@@ -1,3 +1,17 @@
+$interface_config = @{
+    InterfaceAlias = "Ethernet"
+    IPAddress = "192.168.23.1"
+    PrefixLength = "24"
+}
+
+try{
+    New-NetIPAddress @interface_config
+
+}catch{
+    Write-Host $("(Configuring network settings failed: "+ $_.Exception.Message)
+}
+
+
 Install-WindowsFeature –ConfigurationFilePath Z:\files\quantum_toast_role_install_config.xml
 
 Import-Module ADDSDeployment
