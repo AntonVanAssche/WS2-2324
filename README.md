@@ -15,4 +15,5 @@ GUEST_ADDITION_ISO_PATH=""
 CPUS="2"
 MEMORY="2048"
 DISK_SIZE="50000"
+GUI="0"                     # Select 1 for a "Desktop Experience" VM
 ```

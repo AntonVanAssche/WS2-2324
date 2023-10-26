@@ -53,19 +53,68 @@ command -v vboxmanage &> /dev/null || {
     exit 1
 }
 
-vboxmanage createvm --name "${VM_NAME}" --ostype Windows2019_64 --register
-vboxmanage modifyvm "${VM_NAME}" --cpus "${CPUS}" --memory "${MEMORY}" --boot1=disk --boot2=dvd
-vboxmanage createmedium disk --filename "${VM_PATH}/${VM_NAME}.vdi" --size "${DISK_SIZE}"
-vboxmanage storagectl "${VM_NAME}" --name "SATA Controller" --add sata --controller IntelAHCI
-vboxmanage storageattach "${VM_NAME}" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "${VM_PATH}/${VM_NAME}.vdi"
-vboxmanage modifyvm "${VM_NAME}" --nic2 intnet --intnet2 "intnet"
-vboxmanage storagectl "${VM_NAME}" --name "IDE Controller" --add ide
-vboxmanage storageattach "${VM_NAME}" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium "${ISO_PATH}"
+vboxmanage createvm --name "${VM_NAME}" \
+    --ostype Windows2019_64 \
+    --register
+vboxmanage modifyvm "${VM_NAME}" \
+    --cpus "${CPUS}" \
+    --memory "${MEMORY}" \
+    --boot1=disk \
+    --boot2=dvd
+vboxmanage createmedium disk \
+    --filename "${VM_PATH}/${VM_NAME}.vdi" \
+    --size "${DISK_SIZE}"
+vboxmanage storagectl "${VM_NAME}" \
+    --name "SATA Controller" \
+    --add sata \
+    --controller IntelAHCI
+vboxmanage storageattach "${VM_NAME}" \
+    --storagectl "SATA Controller" \
+    --port 0 \
+    --device 0 \
+    --type hdd \
+    --medium "${VM_PATH}/${VM_NAME}.vdi"
+vboxmanage modifyvm "${VM_NAME}" \
+    --nic2 intnet \
+    --intnet2 "intnet"
+vboxmanage storagectl "${VM_NAME}" \
+    --name "IDE Controller" \
+    --add ide
+vboxmanage storageattach "${VM_NAME}" \
+    --storagectl "IDE Controller" \
+    --port 0 \
+    --device 0 \
+    --type dvddrive \
+    --medium "${ISO_PATH}"
 
 [[ -d "${HOME}/Shared" ]] || {
     printf 'Shared folder not found. Creating Shared folder...\n'
     mkdir -p "${HOME}/Shared"
 }
-vboxmanage sharedfolder add "${VM_NAME}" --name "Shared" --hostpath "${HOME}/Shared" --automount
-vboxmanage unattended install "${VM_NAME}" --iso="${ISO_PATH}" --user="${USER_NAME}" --password="${USER_PASSWORD}" --additions-iso="${GUEST_ADDITION_ISO_PATH}" --install-additions --start-vm="gui" --post-install-command="shutdown /r /t 2"
+vboxmanage sharedfolder add "${VM_NAME}" \
+    --name "Shared" \
+    --hostpath "${HOME}/Shared" \
+    --automount
+
+if [[ "${GUI}" -eq 1 ]]; then
+    vboxmanage unattended install "${VM_NAME}" \
+        --iso="${ISO_PATH}" \
+        --user="${USER_NAME}" \
+        --password="${USER_PASSWORD}" \
+        --additions-iso="${GUEST_ADDITION_ISO_PATH}" \
+        --install-additions \
+        --start-vm="gui" \
+        --post-install-command="shutdown /r /t 2" \
+        --image-index=2
+else
+    vboxmanage unattended install "${VM_NAME}" \
+        --iso="${ISO_PATH}" \
+        --user="${USER_NAME}" \
+        --password="${USER_PASSWORD}" \
+        --additions-iso="${GUEST_ADDITION_ISO_PATH}" \
+        --install-additions \
+        --start-vm="gui" \
+        --post-install-command="shutdown /r /t 2"
+fi
+
 vboxmanage startvm "${VM_NAME}" --type headless
