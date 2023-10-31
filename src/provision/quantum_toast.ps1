@@ -3,6 +3,7 @@ $interface_config = @{
     IPAddress = "192.168.23.1"
     PrefixLength = "24"
 }
+$pass = "Friday13th!"
 
 try{
     New-NetIPAddress @interface_config
@@ -21,6 +22,7 @@ Install-ADDSForest `
     -DomainMode "WinThreshold" `
     -DomainName "WS2-2324-anton.hogent" `
     -DomainNetbiosName "WS2-2324-ANTON" `
+    -SafeModeAdministratorPassword (ConvertTo-SecureString -AsPlainText "$pass" -Force) `
     -ForestMode "WinThreshold" `
     -InstallDns:$true `
     -LogPath "C:\Windows\NTDS" `
