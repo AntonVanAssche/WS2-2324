@@ -12,7 +12,7 @@ try{
     Write-Host $("(Configuring network settings failed: "+ $_.Exception.Message)
 }
 
-Install-WindowsFeature –ConfigurationFilePath Z:\files\quantum_toast_role_install_config.xml
+Install-WindowsFeature –ConfigurationFilePath Z:\quantum_toast\files\quantum_toast_role_install_config.xml
 Import-Module ADDSDeployment
 Install-ADDSForest `
     -CreateDnsDelegation:$false `
