@@ -18,9 +18,9 @@
 
 | Hostname       | IP-adres     | OS                  | RAM  | CPU | NICs | Software       |
 | :------------- | :----------- | :------------------ | :--- | :-- | :--- | :------------- |
-| QuantumToast   | 192.168.23.1 | Windows Server 2019 | 2 GB | 2   | 1    | AD, DNS, DHCP  |
-| TurboTaco      | 192.168.23.2 | Windows Server 2019 | 4 GB | 4   | 1    | Sharepoint, CA |
-| TofuTerminator | 192.168.23.3 | Windows Server 2019 | 2 GB | 2   | 1    | SQL, DNS       |
+| QuantumToast   | 192.168.23.2 | Windows Server 2019 | 2 GB | 2   | 1    | AD, DNS, DHCP  |
+| TurboTaco      | 192.168.23.3 | Windows Server 2019 | 4 GB | 4   | 1    | Sharepoint, CA |
+| TofuTerminator | 192.168.23.4 | Windows Server 2019 | 2 GB | 2   | 1    | SQL, DNS       |
 | PC-1           | DHCP         | Windows 10          | 2 GB | 2   | 1    |                |
 
 QuantumToast is de Domain Controller, DNS en DHCP server. Doordat de Domain Controller rol standaar DNS bevat, heb ik ook DHCP te installeren. Zodat software i.v.m. het netwerk gegroepeeerd is.
@@ -39,9 +39,9 @@ De topologie bestaat uit 3 servers en 1 client, deze zijn verbonden aan een swit
 
 | Hostname       | IP-adres     | Gateway | Subnetmasker  |
 | :------------- | :----------- | :------ | :------------ |
-| QuantumToast   | 192.168.23.1 | n.v.t.  | 255.255.255.0 |
-| TurboTaco      | 192.168.23.2 | n.v.t.  | 255.255.255.0 |
-| TofuTerminator | 192.168.23.3 | n.v.t.  | 255.255.255.0 |
+| QuantumToast   | 192.168.23.2 | n.v.t.  | 255.255.255.0 |
+| TurboTaco      | 192.168.23.3 | n.v.t.  | 255.255.255.0 |
+| TofuTerminator | 192.168.23.4 | n.v.t.  | 255.255.255.0 |
 | PC-1           | DHCP         | DHCP    | 255.255.255.0 |
 
 <div class="page"/>
