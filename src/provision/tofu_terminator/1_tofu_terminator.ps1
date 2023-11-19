@@ -11,10 +11,6 @@ $dns_config = @{
 
 $pass = "Friday13th!"
 
-$login = New-object `
-    -TypeName System.Management.Automation.PSCredential `
-    -ArgumentList "WS2-2324-anton.hogent\Administrator", (ConvertTo-SecureString -AsPlainText $pass -Force)
-
 try{
     New-NetIPAddress @interface_config
 } catch {
@@ -28,7 +24,11 @@ try{
 }
 
 try{
-    Add-Computer -Domain "WS2-2324-anton.hogent" -Credential $login -Force
+    Add-Computer -ComputerName TofuTerminator `
+        -LocalCredential terminator\Administrator `
+        -DomainName WS2-2324-anton.hogent `
+        -Credential WS2-2324-anton.hogent\Administrator `
+        -Force
 } catch {
     Write-Error $("(Failed to join domain: "+ $_.Exception.Message)
 }
