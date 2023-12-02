@@ -1,4 +1,4 @@
-$interface_config = @{
+﻿$interface_config = @{
     InterfaceAlias = "Ethernet adapter Ethernet 2"
     IPAddress = "192.168.23.4"
     PrefixLength = "24"
@@ -53,16 +53,27 @@ try {
 }
 
 try {
-    D:setup.exe /q `
-        /ACTION=Install `
-        /FEATURES=SQL `
-        /INSTANCENAME=MSSQLSERVER `
-        /SQLSVCACCOUNT="WS2-2324-anton.hogent\Administrator" `
-        /SQLSVCPASSWORD="$pass" `
-        /SQLSYSADMINACCOUNTS="$pass" `
-        /AGTSVCACCOUNT="NT AUTHORITY\NETWORK SERVICE" `
-        /SQLSVCINSTANTFILEINIT="True" `
-        /IACCEPTSQLSERVERLICENSETERMS
+    New-Item -Path C:\SQLServerDownload -ItemType Directory
+    Copy-Item -Path D:\* -Destination C:\SQLServer\ -Recurse
 } catch {
-    Write-Error $("(Failed to install Exchange: "+ $_.Exception.Message)
+    Write-Error $("(Failed to copy SQL Server installation files: "+ $_.Exception.Message)
+}
+
+try {
+    Get-PackageProvider -Name NuGet –ForceBootstrap
+    Install-Module -Name SqlServerDsc -Force
+} catch {
+    Write-Error $("(Failed to install SQL Server DSC: "+ $_.Exception.Message)
+}
+
+# try {
+#     z:\tofu_terminator\files\sql_server_config.ps1
+# } catch {
+#     Write-Error $("(Failed to configure SQL Server: "+ $_.Exception.Message)
+# }
+
+try {
+    Start-DscConfiguration -Path z:\tofu_terminator\files\sql_server_config.ps1 -Wait -Verbose
+} catch {
+    Write-Error $("(Failed to install SQL Server: "+ $_.Exception.Message)
 }
