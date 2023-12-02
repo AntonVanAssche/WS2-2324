@@ -62,3 +62,22 @@ foreach ($machine_name in $machine_names) {
         -ZoneName $dns_reverse_lookup_config.Name `
         -AllowUpdateAny
 }
+
+# Install Standalone Root
+Add-WindowsFeature Adcs-Cert-Authority -IncludeManagementTools
+
+@ca_params = @{
+    CAType = "StandaloneRootCA"
+    KeyLength = 2048
+    HashAlgorithmName = "SHA256"
+    CACommonName = "WS2-2324-anton-QUANTUMTOAST-CA"
+    ValidityPeriod = "Years"
+    ValidityPeriodUnits = 3
+}
+
+Install-AdcsCertificationAuthority @ca_params
+
+certutil -setreg CA\ValidityPeriod "Years"
+certutil -setreg CA\ValidityPeriodUnits 30
+certutil -setreg CA\DSConfigDN "CN=Configuration,DC=WS2-2324-anton,DC=hogent"
+certutil -setreg CA\DSDomainDN "DC=WS2-2324-anton,DC=hogent"
