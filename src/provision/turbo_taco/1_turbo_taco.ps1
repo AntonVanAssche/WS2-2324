@@ -1,4 +1,4 @@
-$interface_config = @{
+﻿$interface_config = @{
     InterfaceAlias = "Ethernet adapter Ethernet 2"
     IPAddress = "192.168.23.3"
     PrefixLength = "24"
@@ -31,4 +31,36 @@ try{
         -Force
 } catch {
     Write-Error $("(Failed to join domain: "+ $_.Exception.Message)
+}
+
+try {
+    $mount_path = "F:\"
+    $config_path = "$mount_path\Files\Setup\config.xml"
+
+    $prerequisites = "$mount_path\PrerequisiteInstaller.exe"
+
+    Start-Process -FilePath "$prerequisites" `
+        -Wait
+
+    Start-Process -FilePath "$mount_path\setup.cmd" `
+        -ArgumentList "/config $config_path" `
+        -Wait
+} catch {
+    Write-Error $("(Failed to install SharePoint Server: "+ $_.Exception.Message)
+}
+
+try {
+    $db_config = @{
+        DatabaseServer = "192.168.23.4"
+        DatabaseName = "MSSQLSERVER"
+        FarmCredentials = (Get-Credential)
+        Passphrase = "$pass"
+    }
+
+    Connect-SPConfigurationDatabase -DatabaseServer "TofuTerminator" `
+        -DatabaseName "MYSQLSERVER" `
+        -Passphrase (ConvertTo-SecureString "MyP@ssw0rd" -AsPlainText -Force)
+    Start-Service SPTimerv4
+} catch {
+    Write-Error $("(Failed to configure SharePoint Server: "+ $_.Exception.Message)
 }
