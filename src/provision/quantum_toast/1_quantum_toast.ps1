@@ -1,5 +1,5 @@
-﻿$interface_config = @{
-    InterfaceAlias = "Ethernet"
+$interface_config = @{
+    InterfaceAlias = "Ethernet adapter Ethernet 2"
     IPAddress = "192.168.23.2"
     PrefixLength = "24"
 }
