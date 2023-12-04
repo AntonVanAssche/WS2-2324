@@ -1,5 +1,5 @@
 ﻿$interface_config = @{
-    InterfaceAlias = "Ethernet adapter Ethernet 2"
+    InterfaceAlias = "Ethernet"
     IPAddress = "192.168.23.4"
     PrefixLength = "24"
 }
@@ -53,27 +53,26 @@ try {
 }
 
 try {
-    New-Item -Path C:\SQLServerDownload -ItemType Directory
-    Copy-Item -Path D:\* -Destination C:\SQLServer\ -Recurse
+    D:setup.exe /QS `
+        /SQLSVCPASSWORD=$pass `
+        /ASSVCPASSWORD=$pass `
+        /ACTION=Install `
+        /ConfigurationFile="Z:\tofu_terminator\files\sql_server_config.ini"
 } catch {
-    Write-Error $("(Failed to copy SQL Server installation files: "+ $_.Exception.Message)
+    Write-Error $("(Failed to install Exchange: "+ $_.Exception.Message)
 }
 
 try {
-    Get-PackageProvider -Name NuGet –ForceBootstrap
-    Install-Module -Name SqlServerDsc -Force
+    New-NetFirewallRule -DisplayName "SQLServer default instance" `
+        -Direction Inbound `
+        -LocalPort 1433 `
+        -Protocol TCP `
+        -Action Allow
+    New-NetFirewallRule -DisplayName "SQLServer Browser service" `
+        -Direction Inbound `
+        -LocalPort 1434 `
+        -Protocol UDP `
+        -Action Allow
 } catch {
-    Write-Error $("(Failed to install SQL Server DSC: "+ $_.Exception.Message)
-}
-
-# try {
-#     z:\tofu_terminator\files\sql_server_config.ps1
-# } catch {
-#     Write-Error $("(Failed to configure SQL Server: "+ $_.Exception.Message)
-# }
-
-try {
-    Start-DscConfiguration -Path z:\tofu_terminator\files\sql_server_config.ps1 -Wait -Verbose
-} catch {
-    Write-Error $("(Failed to install SQL Server: "+ $_.Exception.Message)
+    Write-Error $("(Failed to configure firewall: "+ $_.Exception.Message)
 }
