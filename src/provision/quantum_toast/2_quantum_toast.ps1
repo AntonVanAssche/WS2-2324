@@ -66,7 +66,7 @@ foreach ($machine_name in $machine_names) {
 # Install Standalone Root
 Add-WindowsFeature Adcs-Cert-Authority -IncludeManagementTools
 
-@ca_params = @{
+$ca_params = @{
     CAType = "StandaloneRootCA"
     KeyLength = 2048
     HashAlgorithmName = "SHA256"
