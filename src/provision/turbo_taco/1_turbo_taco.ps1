@@ -1,4 +1,4 @@
-﻿$interface_config = @{
+$interface_config = @{
     InterfaceAlias = "Ethernet"
     IPAddress = "192.168.23.3"
     PrefixLength = "24"
@@ -103,8 +103,23 @@ try {
 
     Connect-SPConfigurationDatabase -DatabaseServer "TofuTerminator" `
         -DatabaseName "MYSQLSERVER" `
-        -Passphrase (ConvertTo-SecureString "MyP@ssw0rd" -AsPlainText -Force)
+        -Passphrase (ConvertTo-SecureString "$pass" -AsPlainText -Force)
     Start-Service SPTimerv4
 } catch {
     Write-Error $("(Failed to configure SharePoint Server: "+ $_.Exception.Message)
+}
+
+try {
+    New-NetFirewallRule -DisplayName "ICMPv4 Allow Ping" `
+        -Direction Inbound `
+        -Protocol ICMPv4 `
+        -IcmpType 8 `
+        -Action Allow
+    New-NetFirewallRule -DisplayName "ICMPv6 Allow Ping" `
+        -Direction Inbound `
+        -Protocol ICMPv6 `
+        -IcmpType 8 `
+        -Action Allow
+} catch {
+    Write-Error $("(Failed to configure firewall: "+ $_.Exception.Message)
 }

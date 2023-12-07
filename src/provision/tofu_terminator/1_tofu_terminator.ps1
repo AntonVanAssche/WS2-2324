@@ -1,4 +1,4 @@
-﻿$interface_config = @{
+$interface_config = @{
     InterfaceAlias = "Ethernet"
     IPAddress = "192.168.23.4"
     PrefixLength = "24"
@@ -72,6 +72,16 @@ try {
         -Direction Inbound `
         -LocalPort 1434 `
         -Protocol UDP `
+        -Action Allow
+    New-NetFirewallRule -DisplayName "ICMPv4 Allow Ping" `
+        -Direction Inbound `
+        -Protocol ICMPv4 `
+        -IcmpType 8 `
+        -Action Allow
+    New-NetFirewallRule -DisplayName "ICMPv6 Allow Ping" `
+        -Direction Inbound `
+        -Protocol ICMPv6 `
+        -IcmpType 8 `
         -Action Allow
 } catch {
     Write-Error $("(Failed to configure firewall: "+ $_.Exception.Message)
