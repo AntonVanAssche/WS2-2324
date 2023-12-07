@@ -1,5 +1,5 @@
 $interface_config = @{
-    InterfaceAlias = "Ethernet adapter Ethernet 2"
+    InterfaceAlias = "Ethernet"
     IPAddress = "192.168.23.2"
     PrefixLength = "24"
 }
@@ -12,7 +12,7 @@ try{
     Write-Host $("(Configuring network settings failed: "+ $_.Exception.Message)
 }
 
-Install-WindowsFeature –ConfigurationFilePath Z:\quantum_toast\files\quantum_toast_role_install_config.xml
+Install-WindowsFeature -ConfigurationFilePath Z:\quantum_toast\files\quantum_toast_role_install_config.xml
 Import-Module ADDSDeployment
 Install-ADDSForest `
     -CreateDnsDelegation:$false `
@@ -25,5 +25,5 @@ Install-ADDSForest `
     -InstallDns:$true `
     -LogPath "C:\Windows\NTDS" `
     -NoRebootOnCompletion:$false `
-    -SysvolPath "C:\Windows\SYSVOL" `
+    -SysvolPath "C:\Windows\SYSVO" `
     -Force:$true
