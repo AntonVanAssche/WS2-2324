@@ -24,10 +24,11 @@ try{
 }
 
 try{
+    $login = New-object -TypeName System.Management.Automation.PSCredential `
+        -ArgumentList "WS2-2324-anton\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
     Add-Computer -ComputerName TofuTerminator `
-        -LocalCredential terminator\Administrator `
         -DomainName WS2-2324-anton.hogent `
-        -Credential WS2-2324-anton.hogent\Administrator `
+        -Credential $login `
         -Force
 } catch {
     Write-Error $("(Failed to join domain: "+ $_.Exception.Message)
