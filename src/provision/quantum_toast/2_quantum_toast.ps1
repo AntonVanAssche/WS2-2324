@@ -81,3 +81,28 @@ certutil -setreg CA\ValidityPeriod "Years"
 certutil -setreg CA\ValidityPeriodUnits 30
 certutil -setreg CA\DSConfigDN "CN=Configuration,DC=WS2-2324-anton,DC=hogent"
 certutil -setreg CA\DSDomainDN "DC=WS2-2324-anton,DC=hogent"
+
+$users = @(
+    "Anton Van Assche",
+    "Johnny Deere",
+    "Tessa Twinkletoes",
+)
+foreach ($user in $users) {
+    $name_parts = $user -split ' '
+    $first_name = $name_parts[0]
+    $last_name_initials = ($name_parts[1..$name_parts.Count] | ForEach-Object { $_.Substring(0,1) }) -join ''
+    $username = $first_name + $last_name_initials
+
+    Write-Host "User: $user"
+    Write-Host "Username: $username"
+
+    try {
+        New-ADUser -Name $user `
+            -SamAccountName $username `
+            -Path "CN=Users,DC=WS2-2324-anton,DC=hogent" `
+            -AccountPassword (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force) `
+            -Enabled $true
+    } catch {
+        Write-Error $("Failed to create user: $user " + $_.Exception.Message)
+    }
+}
