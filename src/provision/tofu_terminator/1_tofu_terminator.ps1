@@ -9,6 +9,13 @@ $dns_config = @{
     ServerAddresses = @("192.168.23.2")
 }
 
+$secondary_server_dns_config = @{
+    MasterServers = @("192.168.23.2")
+    Name = "WS2-2324-anton.hogent"
+    ZoneFile = "WS2-2324-anton.hogent.dns"
+    ErrorAction = "Stop"
+}
+
 $pass = "Friday13th!"
 
 try{
@@ -36,19 +43,8 @@ try{
 
 try {
     Install-WindowsFeature -Name DNS -IncludeManagementTools
-    Install-Module -Name DnsServer
-    Install-WindowsFeature -Name DNS -IncludeManagementTools
-    Install-DnsServer -NoReboot -Force
 
-    Add-DnsServerPrimaryZone `
-        -Name "WS2-2324-anton.hogent" `
-        -ZoneFile "WS2-2324-anton.hogent.dns" `
-        -ReplicationScope "Forest"
-
-    Set-DnsServerPrimaryZone `
-        -Name "WS2-2324-anton.hogent" `
-        -MasterServers $dns_config.ServerAddresses `
-        -ReplicationScope "Forest"
+    Add-DnsServerSecondaryZone @secondary_server_dns_config
 } catch {
     Write-Error $("(Failed to configure server as secondary DNS: "+ $_.Exception.Message)
 }
