@@ -2,6 +2,7 @@ $interface_config = @{
     InterfaceAlias = "Ethernet"
     IPAddress = "192.168.23.2"
     PrefixLength = "24"
+    DefaultGateway = "192.168.23.1"
 }
 $pass = "Friday13th!"
 

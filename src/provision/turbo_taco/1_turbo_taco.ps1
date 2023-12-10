@@ -2,6 +2,7 @@
     InterfaceAlias = "Ethernet"
     IPAddress = "192.168.23.3"
     PrefixLength = "24"
+    DefaultGateway = "192.168.23.1"
 }
 
 $dns_config = @{

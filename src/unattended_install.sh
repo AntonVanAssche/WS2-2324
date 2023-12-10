@@ -53,6 +53,14 @@ command -v vboxmanage &> /dev/null || {
     exit 1
 }
 
+vboxmanage natnetwork add \
+    --netname natwinserv2 \
+    --network "192.168.23.0/24" \
+    --enable \
+    --dhcp off
+vboxmanage natnetwork start \
+    --netname natwinserv2
+
 vboxmanage createvm --name "${VM_NAME}" \
     --ostype Windows2019_64 \
     --register
@@ -75,8 +83,8 @@ vboxmanage storageattach "${VM_NAME}" \
     --type hdd \
     --medium "${VM_PATH}/${VM_NAME}.vdi"
 vboxmanage modifyvm "${VM_NAME}" \
-    --nic2 intnet \
-    --intnet2 "intnet"
+    --nic1 natnetwork \
+    --nat-network1 "natwinserv2"
 vboxmanage storagectl "${VM_NAME}" \
     --name "IDE Controller" \
     --add ide
