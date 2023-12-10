@@ -85,7 +85,7 @@ certutil -setreg CA\DSDomainDN "DC=WS2-2324-anton,DC=hogent"
 $users = @(
     "Anton Van Assche",
     "Johnny Deere",
-    "Tessa Twinkletoes",
+    "Tessa Twinkletoes"
 )
 foreach ($user in $users) {
     $name_parts = $user -split ' '
