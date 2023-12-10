@@ -49,7 +49,7 @@ Add-DnsServerPrimaryZone `
 
 # Records for QuantumToast, TurboTaco and TofuTerminator.
 $machine_names = @("QuantumToast", "TurboTaco", "TofuTerminator")
-$machine_ips = @("192.168.23.1", "192.168.23.2", "192.168.23.3")
+$machine_ips = @("192.168.23.2", "192.168.23.3", "192.168.23.4")
 foreach ($machine_name in $machine_names) {
     Add-DnsServerResourceRecordA `
         -Name $machine_name `
