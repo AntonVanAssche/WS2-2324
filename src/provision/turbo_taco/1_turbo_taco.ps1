@@ -96,19 +96,56 @@ try {
 }
 
 try {
-    $db_config = @{
-        DatabaseServer = "192.168.23.4"
+    Add-PSSnapin Microsoft.SharePoint.PowerShell
+
+    $farm_config = @{
+        DatabaseServer = "TofuTerminator"
         DatabaseName = "MSSQLSERVER"
-        FarmCredentials = (Get-Credential)
-        Passphrase = "$pass"
+        Passphrase = (ConvertTo-SecureString $pass -AsPlainText -force)
+        AdministrationContentDatabaseName = "SharePoint_AdminContent"
+        FarmCredentials = (Get-Credential "WS2-2324-anton\Administrator")
+        LocalServerRole = "SingleServerFarm"
     }
 
-    Connect-SPConfigurationDatabase -DatabaseServer "TofuTerminator" `
-        -DatabaseName "MYSQLSERVER" `
-        -Passphrase (ConvertTo-SecureString "$pass" -AsPlainText -Force)
-    Start-Service SPTimerv4
+    New-SPConfigurationDatabase @farm_config
 } catch {
-    Write-Error $("(Failed to configure SharePoint Server: "+ $_.Exception.Message)
+    Write-Error $("(Failed to create SharePoint Farm: "+ $_.Exception.Message)
+}
+
+try {
+    Initialize-SPResourceSecurity
+} catch {
+    Write-Error $("(Failed to install SharePoint Resources: "+ $_.Exception.Message)
+}
+
+try {
+    Install-SPService
+} catch {
+    Write-Error $("(Failed to install SharePoint Services: "+ $_.Exception.Message)
+}
+
+try {
+    Install-SPFeature -AllExistingFeatures
+} catch {
+    Write-Error $("(Failed to install SharePoint Features: "+ $_.Exception.Message)
+}
+
+try {
+    New-SPCentralAdministration -Port 2016 -WindowsAuthProvider NTLM
+} catch {
+    Write-Error $("(Failed to create Central Administration: "+ $_.Exception.Message)
+}
+
+try {
+    Install-SPHelpCollection -All
+} catch {
+    Write-Error $("(Failed to install help: "+ $_.Exception.Message)
+}
+
+try {
+    Install-SPApplicationContent
+} catch {
+    Write-Error $("(Failed to application content: "+ $_.Exception.Message)
 }
 
 try {
