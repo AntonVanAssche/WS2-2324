@@ -1,4 +1,4 @@
-﻿$interface_config = @{
+$interface_config = @{
     InterfaceAlias = "Ethernet"
     IPAddress = "192.168.23.3"
     PrefixLength = "24"
@@ -7,7 +7,7 @@
 
 $dns_config = @{
     InterfaceAlias = "Ethernet"
-    ServerAddresses = @("192.168.23.2")
+    ServerAddresses = @("192.168.23.2", "192.168.23.3")
 }
 
 $pass = "Friday13th!"

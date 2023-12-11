@@ -63,6 +63,13 @@ foreach ($machine_name in $machine_names) {
         -AllowUpdateAny
 }
 
+$dns_config = @{
+    InterfaceAlias = "Ethernet"
+    ServerAddresses = @("192.168.23.2", "192.168.23.3")
+}
+
+Set-DnsClientServerAddress @dns_config
+
 # Install Standalone Root
 Add-WindowsFeature Adcs-Cert-Authority -IncludeManagementTools
 
