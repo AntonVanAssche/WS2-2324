@@ -26,7 +26,7 @@ try{
 
 try{
     $login = New-object -TypeName System.Management.Automation.PSCredential `
-        -ArgumentList "WS2-2324-anton\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
+        -ArgumentList "WS2-2324-anton.hogent\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
     Add-Computer -ComputerName TurboTaco `
         -DomainName WS2-2324-anton.hogent `
         -Credential $login `

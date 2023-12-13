@@ -1,17 +1,17 @@
 $interface_config = @{
     InterfaceAlias = "Ethernet"
-    IPAddress = "192.168.23.4"
+    IPAddress = "192.168.23.30"
     PrefixLength = "24"
     DefaultGateway = "192.168.23.1"
 }
 
 $dns_config = @{
     InterfaceAlias = "Ethernet"
-    ServerAddresses = @("192.168.23.2", "192.168.23.3")
+    ServerAddresses = @("192.168.23.10", "192.168.23.30")
 }
 
 $secondary_server_dns_config = @{
-    MasterServers = @("192.168.23.2")
+    MasterServers = @("192.168.23.10")
     Name = "WS2-2324-anton.hogent"
     ZoneFile = "WS2-2324-anton.hogent.dns"
     ErrorAction = "Stop"
@@ -33,7 +33,7 @@ try{
 
 try{
     $login = New-object -TypeName System.Management.Automation.PSCredential `
-        -ArgumentList "WS2-2324-anton\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
+        -ArgumentList "WS2-2324-anton.hogent\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
     Add-Computer -ComputerName TofuTerminator `
         -DomainName WS2-2324-anton.hogent `
         -Credential $login `

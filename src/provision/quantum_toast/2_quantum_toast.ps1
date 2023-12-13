@@ -1,6 +1,6 @@
 $interface_config = @{
     InterfaceAlias = "Ethernet adapter Ethernet 2"
-    IPAddress = "192.168.23.2"
+    IPAddress = "192.168.23.10"
     SubnetMask = "255.255.255.0"
 }
 $dns_forward_lookup_config = @{
@@ -49,7 +49,7 @@ Add-DnsServerPrimaryZone `
 
 # Records for QuantumToast, TurboTaco and TofuTerminator.
 $machine_names = @("QuantumToast", "TurboTaco", "TofuTerminator")
-$machine_ips = @("192.168.23.2", "192.168.23.3", "192.168.23.4")
+$machine_ips = @("192.168.23.10", "192.168.23.20", "192.168.23.30")
 foreach ($machine_name in $machine_names) {
     Add-DnsServerResourceRecordA `
         -Name $machine_name `
@@ -65,10 +65,10 @@ foreach ($machine_name in $machine_names) {
 
 $dns_config = @{
     InterfaceAlias = "Ethernet"
-    ServerAddresses = @("192.168.23.2", "192.168.23.3")
+    ServerAddresses = @("192.168.23.10", "192.168.23.30")
 }
 
-Set-DnsClientServerAddress @dns_config
+# Set-DnsClientServerAddress @dns_config
 
 # Install Standalone Root
 Add-WindowsFeature Adcs-Cert-Authority -IncludeManagementTools

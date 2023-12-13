@@ -1,6 +1,6 @@
 $interface_config = @{
     InterfaceAlias = "Ethernet"
-    IPAddress = "192.168.23.2"
+    IPAddress = "192.168.23.10"
     PrefixLength = "24"
     DefaultGateway = "192.168.23.1"
 }
@@ -26,5 +26,5 @@ Install-ADDSForest `
     -InstallDns:$true `
     -LogPath "C:\Windows\NTDS" `
     -NoRebootOnCompletion:$false `
-    -SysvolPath "C:\Windows\SYSVO" `
+    -SysvolPath "C:\Windows\SYSVOL" `
     -Force:$true
