@@ -26,8 +26,8 @@ try{
 
 try{
     $login = New-object -TypeName System.Management.Automation.PSCredential `
-        -ArgumentList "WS2-2324-anton.hogent.hogent\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
-    Add-hogentputer -hogentputerName TurboTaco `
+        -ArgumentList "WS2-2324-anton.hogent\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
+    Add-Computer -hogentputerName TurboTaco `
         -DomainName WS2-2324-anton.hogent `
         -Credential $login `
         -Force
@@ -49,7 +49,7 @@ try {
     Add-WindowsFeature Net-Framework-Features, `
         Web-Server, `
         Web-WebServer, `
-        Web-hogentmon-Http, `
+        Web-Common-Http, `
         Web-Static-Content, `
         Web-Default-Doc, `
         Web-Dir-Browsing, `
@@ -70,11 +70,11 @@ try {
         Web-Filtering, `
         Web-Digest-Auth, `
         Web-Performance, `
-        Web-Stat-hogentpression, `
-        Web-Dyn-hogentpression, `
+        Web-Stat-Compression, `
+        Web-Dyn-Compression, `
         Web-Mgmt-Tools, `
         Web-Mgmt-Console, `
-        Web-Mgmt-hogentpat, `
+        Web-Mgmt-Compat, `
         Web-Metabase, `
         WAS, `
         WAS-Process-Model, `
