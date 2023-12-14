@@ -1,13 +1,13 @@
-$interface_config = @{
+﻿$interface_config = @{
     InterfaceAlias = "Ethernet"
-    IPAddress = "192.168.23.3"
+    IPAddress = "192.168.23.20"
     PrefixLength = "24"
     DefaultGateway = "192.168.23.1"
 }
 
 $dns_config = @{
     InterfaceAlias = "Ethernet"
-    ServerAddresses = @("192.168.23.2", "192.168.23.3")
+    ServerAddresses = @("192.168.23.10", "192.168.23.30")
 }
 
 $pass = "Friday13th!"
@@ -26,8 +26,8 @@ try{
 
 try{
     $login = New-object -TypeName System.Management.Automation.PSCredential `
-        -ArgumentList "WS2-2324-anton.hogent\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
-    Add-Computer -ComputerName TurboTaco `
+        -ArgumentList "WS2-2324-anton.hogent.hogent\Administrator", (ConvertTo-SecureString -AsPlainText "Friday13th!" -Force)
+    Add-hogentputer -hogentputerName TurboTaco `
         -DomainName WS2-2324-anton.hogent `
         -Credential $login `
         -Force
@@ -37,7 +37,8 @@ try{
 
 try {
     $mount_path = "F:\"
-    $config_path = "$mount_path\Files\Setup\config.xml"
+    # $config_path = "$mount_path\Files\Setup\config.xml"
+    $config_path = "Z:\turbo_taco\files\config.xml"
 
     $prerequisites = "$mount_path\PrerequisiteInstaller.exe"
 
@@ -48,7 +49,7 @@ try {
     Add-WindowsFeature Net-Framework-Features, `
         Web-Server, `
         Web-WebServer, `
-        Web-Common-Http, `
+        Web-hogentmon-Http, `
         Web-Static-Content, `
         Web-Default-Doc, `
         Web-Dir-Browsing, `
@@ -69,11 +70,11 @@ try {
         Web-Filtering, `
         Web-Digest-Auth, `
         Web-Performance, `
-        Web-Stat-Compression, `
-        Web-Dyn-Compression, `
+        Web-Stat-hogentpression, `
+        Web-Dyn-hogentpression, `
         Web-Mgmt-Tools, `
         Web-Mgmt-Console, `
-        Web-Mgmt-Compat, `
+        Web-Mgmt-hogentpat, `
         Web-Metabase, `
         WAS, `
         WAS-Process-Model, `
@@ -161,4 +162,34 @@ try {
         -Action Allow
 } catch {
     Write-Error $("(Failed to configure firewall: "+ $_.Exception.Message)
+}
+
+try {
+    $AuthProvider = New-SPAuthenticationProvider `
+        -UseWindowsIntegratedAuthentication `
+        -DisableKerberos
+
+    New-SPWebApplication `
+        -Name "IntranetSite" `
+        -Port 8080 `
+        -HostHeader "intranet.WS2-2324-anton.hogent" `
+        -URL "http://intranet.ws2-2324-anton.hogent/" `
+        -ApplicationPool "IntranetAppPool" `
+        -ApplicationPoolAccount (Get-SPManagedAccount "WS2-2324-ANTON\Administrator") `
+        -DatabaseName "SP_ContentDB" `
+        -DatabaseServer "TofuTerminator.WS2-2324-ANTON.hogent" `
+        -AuthenticationProvider $AuthProvider `
+        -Verbose
+} catch {
+    Write-Error $("(Failed to create web application: "+ $_.Exception.Message)
+}
+
+try {
+    New-SPSite `
+        -Url "http://intranet.ws2-2324-anton.hogent:8080/" `
+        -OwnerAlias "WS2-2324-anton\Administrator" `
+        -Template "STS#0" `
+        -Verbose
+} catch {
+    Write-Error $("(Failed to create site collection: "+ $_.Exception.Message)
 }

@@ -47,6 +47,25 @@ Add-DnsServerPrimaryZone `
     -DynamicUpdate "Secure" `
     -Verbose
 
+Set-DnsServerPrimaryZone `
+    -Name $dns_reverse_lookup_config.Name `
+    -SecondaryServers "192.168.23.20" `
+    -SecureSecondaries "TransferAnyServer"
+
+Set-DnsServerPrimaryZone `
+    -Name $dns_forward_lookup_config.Name `
+    -SecondaryServers "192.168.23.20" `
+    -SecureSecondaries "TransferAnyServer"
+
+Add-DnsServerResourceRecord `
+    -ZoneName $dns_forward_lookup_config.Name `
+    -Name "." `
+    -NS `
+    -NameServer "TofuTerminator.WS2-2324-anton.hogent" `
+    -IPv4Address "192.168.23.30" `
+    -AllowUpdateAny `
+    -Verbose
+
 # Records for QuantumToast, TurboTaco and TofuTerminator.
 $machine_names = @("QuantumToast", "TurboTaco", "TofuTerminator")
 $machine_ips = @("192.168.23.10", "192.168.23.20", "192.168.23.30")
@@ -68,7 +87,7 @@ $dns_config = @{
     ServerAddresses = @("192.168.23.10", "192.168.23.30")
 }
 
-# Set-DnsClientServerAddress @dns_config
+Set-DnsClientServerAddress @dns_config
 
 # Install Standalone Root
 Add-WindowsFeature Adcs-Cert-Authority -IncludeManagementTools

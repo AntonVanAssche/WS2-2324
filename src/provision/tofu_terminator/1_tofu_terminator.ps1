@@ -61,6 +61,16 @@ try {
 }
 
 try {
+    New-NetFirewallRule -DisplayName "Allow DNS" `
+        -Direction Inbound `
+        -LocalPort 53 `
+        -Protocol TCP `
+        -Action Allow
+    New-NetFirewallRule -DisplayName "Allow DNS" `
+        -Direction Inbound `
+        -LocalPort 53 `
+        -Protocol UDP `
+        -Action Allow
     New-NetFirewallRule -DisplayName "SQLServer default instance" `
         -Direction Inbound `
         -LocalPort 1433 `

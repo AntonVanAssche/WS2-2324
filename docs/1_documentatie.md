@@ -16,12 +16,12 @@
 
 ## VMs <a name="vms"></a>
 
-| Hostname       | IP-adres     | OS                  | RAM  | CPU | NICs | Software       |
-| :------------- | :----------- | :------------------ | :--- | :-- | :--- | :------------- |
-| QuantumToast   | 192.168.23.2 | Windows Server 2019 | 2 GB | 2   | 1    | AD, DNS, DHCP  |
-| TurboTaco      | 192.168.23.3 | Windows Server 2019 | 4 GB | 4   | 1    | Sharepoint, CA |
-| TofuTerminator | 192.168.23.4 | Windows Server 2019 | 2 GB | 2   | 1    | SQL, DNS       |
-| PC-1           | DHCP         | Windows 10          | 2 GB | 2   | 1    |                |
+| Hostname       | IP-adres     | OS                   | RAM  | CPU | NICs | Software       |
+| :------------- | :----------- | :------------------- | :--- | :-- | :--- | :------------- |
+| QuantumToast   | 192.168.23.10 | Windows Server 2019 | 2 GB | 2   | 1    | AD, DNS, DHCP  |
+| TurboTaco      | 192.168.23.20 | Windows Server 2019 | 4 GB | 4   | 1    | Sharepoint, CA |
+| TofuTerminator | 192.168.23.30 | Windows Server 2019 | 2 GB | 2   | 1    | SQL, DNS       |
+| PC-1           | DHCP         | Windows 10           | 2 GB | 2   | 1    |                |
 
 QuantumToast is de Domain Controller, DNS en DHCP server. Doordat de Domain Controller rol standaar DNS bevat, heb ik ook DHCP te installeren. Zodat software i.v.m. het netwerk gegroepeeerd is.
 
@@ -37,16 +37,37 @@ PC-1 is een standaard Windows 10 machine, die via DHCP een IP-adres krijgt.
 
 De topologie bestaat uit 3 servers en 1 client, deze zijn verbonden aan een switch. Om ervoor te zorgen dat zowel de servers als de client kunnen surfen op het internet is deze switch verbonden aan een router, die op zijn beurt verbonden is aan de cloud/ISP.
 
-| Hostname       | IP-adres     | Gateway | Subnetmasker  |
-| :------------- | :----------- | :------ | :------------ |
-| QuantumToast   | 192.168.23.2 | n.v.t.  | 255.255.255.0 |
-| TurboTaco      | 192.168.23.3 | n.v.t.  | 255.255.255.0 |
-| TofuTerminator | 192.168.23.4 | n.v.t.  | 255.255.255.0 |
-| PC-1           | DHCP         | DHCP    | 255.255.255.0 |
+| Hostname       | IP-adres      | Gateway | Subnetmasker  |
+| :------------- | :------------ | :------ | :------------ |
+| QuantumToast   | 192.168.23.10 | n.v.t.  | 255.255.255.0 |
+| TurboTaco      | 192.168.23.20 | n.v.t.  | 255.255.255.0 |
+| TofuTerminator | 192.168.23.30 | n.v.t.  | 255.255.255.0 |
+| PC-1           | DHCP          | DHCP    | 255.255.255.0 |
 
 <div class="page"/>
 
 # Ondervonden Problemen <a name="ondervonden-problemen"></a>
+
+## Nat Network
+
+Initieel gaf `ipconfig /all` na het configureren van `192.168.23.2` als statische IP-adres op QuantumToast aan dat het een `duplicate address` was.
+Na het proberen van een hoger IP-adres (`192.168.23.11`), bleek het opgelost te zijn.
+
+## Secondary DNS
+
+Na het configureren van de secondary DNS op TofuTerminator, bleek dat de DNS server niet meer werkte.
+Dit kwam doordat de Zone Transfer Policy niet correct was ingesteld.
+Deze stond op `None`, maar moest op `Allow zone transfers` staan.
+
+```powershell
+Set-DnsServerPrimaryZone `
+    -Name $dns_reverse_lookup_config.Name `
+    -SecureSecondaries "TransferAnyServer"
+
+Set-DnsServerPrimaryZone `
+    -Name $dns_forward_lookup_config.Name `
+    -SecureSecondaries "TransferAnyServer"
+```
 
 ## SharePoint Server 2019 Prerequisites
 

@@ -101,7 +101,7 @@ Dit script zal aanvullende configuraties doorvoeren en de QuantumToast-server vo
 
 **WIP**
 
-Standard trial product key: `F2DPD-HPNPV-WHKMK-G7C38-2G22J`
+Standard trial product key: `XNPCY-7K9B8-Y63P8-82MVM-39P2H`
 
 ## Provisioning TofuTerminator Server
 
