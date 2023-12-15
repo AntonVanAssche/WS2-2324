@@ -18,7 +18,7 @@ $dns_reverse_lookup_config = @{
 $forwarder = "8.8.8.8"
 $dhcp_scope = @{
     Name = "scope-WS2-2324-anton.hogent"
-    IPAddress = "192.168.23.1"
+    IPAddress = "192.168.23.10"
     SubnetMask = "255.255.255.0"
     Description = "DHCP Scope for WS2-2324-anton.hogent"
     StartRange = "192.168.23.51"
@@ -36,6 +36,12 @@ Add-DhcpServerv4Scope `
     -SubnetMask $interface_config.SubnetMask `
     -Description $dhcp_scope.Description `
     -State Active `
+
+Set-DhcpServerV4OptionValue `
+    -ComputerName "WS2-2324-anton.hogent" `
+    -ScopeId "192.168.23.0" `
+    -DnsServer @("192.168.23.10", "192.168.23.30") `
+    -Router "192.168.23.1"
 
 Set-DnsServerForwarder `
     -IPAddress $forwarder `
