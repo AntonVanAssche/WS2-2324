@@ -16,12 +16,12 @@
 
 ## VMs <a name="vms"></a>
 
-| Hostname       | IP-adres     | OS                   | RAM  | CPU | NICs | Software       |
-| :------------- | :----------- | :------------------- | :--- | :-- | :--- | :------------- |
-| QuantumToast   | 192.168.23.10 | Windows Server 2019 | 2 GB | 2   | 1    | AD, DNS, DHCP  |
-| TurboTaco      | 192.168.23.20 | Windows Server 2019 | 4 GB | 4   | 1    | Sharepoint, CA |
-| TofuTerminator | 192.168.23.30 | Windows Server 2019 | 2 GB | 2   | 1    | SQL, DNS       |
-| PC-1           | DHCP         | Windows 10           | 2 GB | 2   | 1    |                |
+| Hostname       | IP-adres      | OS                  | RAM  | CPU | NICs | Software           |
+| :------------- | :------------ | :------------------ | :--- | :-- | :--- | :----------------- |
+| QuantumToast   | 192.168.23.10 | Windows Server 2019 | 2 GB | 2   | 1    | AD, CA, DNS, DHCP  |
+| TurboTaco      | 192.168.23.20 | Windows Server 2019 | 4 GB | 4   | 1    | Sharepoint         |
+| TofuTerminator | 192.168.23.30 | Windows Server 2019 | 2 GB | 2   | 1    | SQL, DNS           |
+| PC-1           | DHCP          | Windows 10          | 2 GB | 2   | 1    |                    |
 
 QuantumToast is de Domain Controller, DNS en DHCP server. Doordat de Domain Controller rol standaar DNS bevat, heb ik ook DHCP te installeren. Zodat software i.v.m. het netwerk gegroepeeerd is.
 
@@ -37,12 +37,12 @@ PC-1 is een standaard Windows 10 machine, die via DHCP een IP-adres krijgt.
 
 De topologie bestaat uit 3 servers en 1 client, deze zijn verbonden aan een switch. Om ervoor te zorgen dat zowel de servers als de client kunnen surfen op het internet is deze switch verbonden aan een router, die op zijn beurt verbonden is aan de cloud/ISP.
 
-| Hostname       | IP-adres      | Gateway | Subnetmasker  |
-| :------------- | :------------ | :------ | :------------ |
-| QuantumToast   | 192.168.23.10 | n.v.t.  | 255.255.255.0 |
-| TurboTaco      | 192.168.23.20 | n.v.t.  | 255.255.255.0 |
-| TofuTerminator | 192.168.23.30 | n.v.t.  | 255.255.255.0 |
-| PC-1           | DHCP          | DHCP    | 255.255.255.0 |
+| Hostname       | IP-adres      | Gateway       | Subnetmask    |
+| :------------- | :------------ | :------------ | :------------ |
+| QuantumToast   | 192.168.23.10 | 192.168.23.1  | 255.255.255.0 |
+| TurboTaco      | 192.168.23.20 | 192.168.23.1  | 255.255.255.0 |
+| TofuTerminator | 192.168.23.30 | 192.168.23.1  | 255.255.255.0 |
+| PC-1           | DHCP          | DHCP          | 255.255.255.0 |
 
 <div class="page"/>
 
@@ -320,23 +320,88 @@ elseif (!$operation.Success){
 Dit was op te lossen door de volgende commando's uit te voeren in PowerShell:
 
 ```powershell
-Add-WindowsFeature NET-WCF-HTTP-Activation45,NET-WCF-TCP-Activation45,NET-WCF-Pipe-Activation45
+Add-WindowsFeature NET-WCF-HTTP-Activation45, `
+    NET-WCF-TCP-Activation45, `
+    NET-WCF-Pipe-Activation45
 Import-Module ServerManager
-Add-WindowsFeature Net-Framework-Features,Web-Server,Web-WebServer,Web-Common-Http,Web-Static-Content,Web-Default-Doc,Web-Dir-Browsing,Web-Http-Errors,Web-App-Dev,Web-Asp-Net,Web-Net-Ext,Web-ISAPI-Ext,Web-ISAPI-Filter,Web-Health,Web-Http-Logging,Web-Log-Libraries,Web-Request-Monitor,Web-Http-Tracing,Web-Security,Web-Basic-Auth,Web-Windows-Auth,Web-Filtering,Web-Digest-Auth,Web-Performance,Web-Stat-Compression,Web-Dyn-Compression,Web-Mgmt-Tools,Web-Mgmt-Console,Web-Mgmt-Compat,Web-Metabase,WAS,WAS-Process-Model,WAS-NET-Environment,WAS-Config-APIs,Web-Lgcy-Scripting,Windows-Identity-Foundation,Server-Media-Foundation,Xps-Viewer –Source D:\sources\sxs
+Add-WindowsFeature Net-Framework-Features, `
+    Web-Server, `
+    Web-WebServer, `
+    Web-Common-Http, `
+    Web-Static-Content, `
+    Web-Default-Doc, `
+    Web-Dir-Browsing, `
+    Web-Http-Errors, `
+    Web-App-Dev, `
+    Web-Asp-Net, `
+    Web-Net-Ext, `
+    Web-ISAPI-Ext, `
+    Web-ISAPI-Filter, `
+    Web-Health, `
+    Web-Http-Logging, `
+    Web-Log-Libraries, `
+    Web-Request-Monitor, `
+    Web-Http-Tracing, `
+    Web-Security, `
+    Web-Basic-Auth, `
+    Web-Windows-Auth, `
+    Web-Filtering, `
+    Web-Digest-Auth, `
+    Web-Performance, `
+    Web-Stat-Compression, `
+    Web-Dyn-Compression, `
+    Web-Mgmt-Tools, `
+    Web-Mgmt-Console, `
+    Web-Mgmt-Compat, `
+    Web-Metabase, `
+    WAS, `
+    WAS-Process-Model, `
+    WAS-NET-Environment, `
+    WAS-Config-APIs, `
+    Web-Lgcy-Scripting, `
+    Windows-Identity-Foundation, `
+    Server-Media-Foundation, `
+    Xps-Viewer `
+    –Source D:\sources\sxs
 ```
 
 Oplossing gevonden op: [https://vladtalkstech.com/2017/08/the-tool-was-unable-to-install-web-server-iis-role-sharepoint-2016-on-windows-server-2016.html](https://vladtalkstech.com/2017/08/the-tool-was-unable-to-install-web-server-iis-role-sharepoint-2016-on-windows-server-2016.html)
 
-### Microsoft SQL 2012 Native Client
-
-De prerequisites installer kon steeds de Microsoft SQL 2012 Native Client niet installeren. Dit was op te lossen door de volgende commando's uit te voeren in PowerShell:
-
-Dit kwam doordat de netwerkconfiguratie niet correct was. Eens de VM kon connecteren met het internet, kon de installer de Microsoft SQL 2012 Native Client installeren.
-
 # Huidige Status <a name="huidige-status"></a>
 
-Op dit moment ben ik nog bezig met het automatiseren van de installatie van de Windows Servers. Met name het automatisch aanmaken van de virtual machines a.d.h. `vboxmanage`.
+Op QuantumToast is de Active Directory en de primaire DNS succesvol geïnstalleerd en gecofnigureerd.
+De server zal zich gedragen als DNS forwarder, met als forwarder `8.8.8.8` (Google), en zal enkel zone transfers doen met TofuTerminator.
+De DHCP server is geïnstalleerd, maar heeft een manuele configuratie nodig op het einde om alles door te voeren, na het automatisch configureren.
+Deze zal de adressen `192.168.23.51` tot `192.168.23.100` uitdelen aan clients binnen het Nat Netwerk, zelfs als ze niet binnen het domein zitten.
+De server zal ook de rol van CA op zich nemen, alleen is het mij niet gelukt om een SSL Certificate naar TurboTaco te sturen.
 
-Om ervoor te zorgen dat de code die ik schrijf niet verloren kan gaan bij een systeemcrash, heb ik een Git repository aangemaakt op GitHub. Deze is te vinden op [https://www.github.com/AntonVanAssche/WS2-2324](https://www.github.com/AntonVanAssche/WS2-2324).
+TofuTerminator is volledig geautomatiseerd, dit wil zeggen dat zowel SQL Server als de secundaire-DNS server gecofnigureerd worden tijdens het uitvoeren van het provision script.
+TofuTerminator zal ook tijdens het uitvoeren van het script het domein: `WS2-2324-ANTON.hogent` joinen.
+Het is mogelijk om via Microsoft SQL Server Management Studio te connecteren met de SQL server.
+
+QuantumToast heeft wat meer dingen die niet werken, zo kan ik niet aan de aangemaakte site, ookal gebruik ik de juiste credentials.
+De installatie van SharePoint werkt wel automatisch, al dan niet met enkele manuele interventies nodig.
+Er wordt een Site en Site Collection volledig automatich aangemaakt, maar is helaas niet volledig correct aangezien ik er niet aan kan.
+Zelfs niet na het toevoegen van de `CNAME` record op QuantumToast.
+Bij het connecteren blijf ik in een oneindige lus zitten waar ik mijn inloggegevens moet ingeven.
+
+Clients kunnen ook het domein joinen, maar dit moet manueel gebeuren.
 
 # Conclusie <a name="conclusie"></a>
+
+Ik vond het een tamelijk moeilijke opdracht, vooral het laatste deel (SharePoint).
+Het aanmaken en automatiseren van een domein en primaire DNS-server is vrij straightforward, maar het configureren van de SharePoint server was een hele uitdaging.
+Dit komt vooral doordat de documentatie van Microsoft niet altijd even duidelijk is, en het internet ook niet altijd even duidelijk is i.v.m. het onderwerp.
+Ik heb ook het gevoel dat veel fixes nodig zijn om de vereisten te installeren vooraleer je SharePoint kan installeren.
+Uiteindelijk heb ik dan eens geprobeerd om AutoSPInstaller te gebruiken, maar ook hier was er weinig documentatie over te vinden naar mijn mening.
+Waardoor ik terug overgeschakeld ben naar zelf geschreven scripts.
+
+De opdracht was wel handig om terug wat meer bezig te zijn mij PowerShell, iets wat ik vrij weinig doe.
+Zo heeft het me iets meer details geleerd over de werking van een DNS forwarder en een DNS zone transfer.
+Ook heb ik veel bijgelereerd over de werking van SharePoint, en hoe je deze kan installeren en configureren.
+Ookal werkt dit deel niet 100% bij mij.
+
+Tijdens het maken van deze opdracht heb ik veel tijd verloren aan SharePoint, maar ook aan een probleem i.v.m. NAT Netwerk binnen VirtualBox.
+Initieel had ik niet goed genoeg de opdracht gelezen en dacht ik dat je een NAT adapter gecomineerd met een internal adapter netwerk moest gebruiken.
+Wanneer ik dit doorhad en aangepast had, bleek dat ik IP-adresse had gekozen dat volgens de Network Address Duplicate detection van Windows al in gebruik waren, wat niet het geval was.
+Dit heeft veel tijd gekost om uit te zoeken wat het probleem was en hoe ik het makkelijk kon oplossen.
